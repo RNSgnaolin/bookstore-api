@@ -1,0 +1,11 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: ${DATA_URL}
+        username: ${DATA_USERNAME}
+        password: ${DATA_PASSWORD}
+    jpa:
+        show-sql: false
+        properties:
+            hibernate:
+                format_sql: false
