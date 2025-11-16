@@ -1,5 +1,7 @@
 package br.com.bookstore.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,4 +28,14 @@ public class BookService {
         Author author = authorRepository.findById(data.authorId()).orElseThrow(EntityNotFoundException::new);
         return bookRepository.save(new Book(data.title(), author));
     }
+
+    public Page<Book> findByQuery(String searchPattern, Pageable pageable) {
+        return bookRepository.findByQuery(searchPattern, pageable);
+    }
+
+    public Page<Book> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable);
+    }
+
+
 }

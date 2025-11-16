@@ -7,19 +7,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "Book")
 @Table(name = "books")
 @EqualsAndHashCode(of = "id")
+@Getter
 public class Book {
 
     public Book(String title, Author author) {
         this.title = title;
         this.author = author;
-        this.stock = 0l;
+        this.stock = 0L;
     }
     
     @Id
@@ -27,7 +30,8 @@ public class Book {
     private Long id;
 
     private String title;
-    private Long stock;
+    private long stock;
+    private boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
