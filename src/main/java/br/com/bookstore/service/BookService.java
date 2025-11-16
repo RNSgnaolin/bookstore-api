@@ -30,12 +30,12 @@ public class BookService {
         return bookRepository.save(new Book(data.title().trim(), author));
     }
 
-    public Page<Book> findByQuery(String searchPattern, Pageable pageable) {
-        return bookRepository.findByQuery(searchPattern, pageable);
+    public Page<BookResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
+        return bookRepository.findByQuery(searchPattern, pageable).map(BookResponseDTO::new);
     }
 
-    public Page<Book> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable);
+    public Page<BookResponseDTO> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).map(BookResponseDTO::new);
     }
 
 

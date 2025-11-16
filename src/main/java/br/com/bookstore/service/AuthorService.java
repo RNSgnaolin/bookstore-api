@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.bookstore.dto.AuthorCreateDTO;
+import br.com.bookstore.dto.AuthorResponseDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.repository.AuthorRepository;
 
@@ -24,11 +25,11 @@ public class AuthorService {
         return repository.save(author);
     }
 
-    public Page<Author> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<AuthorResponseDTO> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(AuthorResponseDTO::new);
     }
 
-    public Page<Author> findByQuery(String searchPattern, Pageable pageable) {
-        return repository.findByQuery(searchPattern, pageable);
+    public Page<AuthorResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
+        return repository.findByQuery(searchPattern, pageable).map(AuthorResponseDTO::new);
     }
 }

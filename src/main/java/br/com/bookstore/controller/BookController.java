@@ -2,7 +2,6 @@ package br.com.bookstore.controller;
 
 import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.bookstore.dto.BookCreateDTO;
 import br.com.bookstore.dto.BookResponseDTO;
 import br.com.bookstore.entity.Book;
-import br.com.bookstore.service.AuthorService;
 import br.com.bookstore.service.BookService;
 import jakarta.validation.Valid;
 
@@ -35,11 +33,10 @@ public class BookController {
     public ResponseEntity<Page<BookResponseDTO>> findBooks(@RequestParam(value = "query") Optional<String> searchPattern, Pageable pageable) {
 
         if (searchPattern.isPresent()) {
-            return ResponseEntity.ok(service.findByQuery(searchPattern.get(), pageable)
-            .map(BookResponseDTO::new));
+            return ResponseEntity.ok(service.findByQuery(searchPattern.get(), pageable));
         }
 
-        return ResponseEntity.ok(service.findAll(pageable).map(BookResponseDTO::new));
+        return ResponseEntity.ok(service.findAll(pageable));
 
     }
 
