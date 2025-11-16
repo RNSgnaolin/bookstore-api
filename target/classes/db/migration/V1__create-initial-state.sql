@@ -12,6 +12,7 @@ create table books(
     author_id bigint not null,
     title varchar(255) not null,
     stock bigint not null,
+    deleted boolean not null default false,
 
     constraint pk_books_id primary key(id),
 
