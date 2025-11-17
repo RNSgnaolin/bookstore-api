@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.bookstore.dto.BookCreateDTO;
 import br.com.bookstore.dto.BookResponseDTO;
+import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Book;
 import br.com.bookstore.service.BookService;
 import jakarta.validation.Valid;
@@ -48,4 +51,10 @@ public class BookController {
 
         return ResponseEntity.created(uri).body(new BookResponseDTO(book));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @RequestBody BookUpdateDTO data) {
+        return ResponseEntity.ok(service.update(id, data));
+    }
+
 }

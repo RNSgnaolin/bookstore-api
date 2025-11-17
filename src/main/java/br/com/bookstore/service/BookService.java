@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.bookstore.dto.BookCreateDTO;
 import br.com.bookstore.dto.BookResponseDTO;
+import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.entity.Book;
 import br.com.bookstore.repository.AuthorRepository;
@@ -27,7 +28,7 @@ public class BookService {
     @Transactional
     public Book create(BookCreateDTO data) {
         Author author = authorRepository.findById(data.authorId()).orElseThrow(EntityNotFoundException::new);
-        return bookRepository.save(new Book(data.title().trim(), author));
+        return bookRepository.save(new Book(data.title().trim(), author, data.pageCount()));
     }
 
     public Page<BookResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
@@ -36,6 +37,23 @@ public class BookService {
 
     public Page<BookResponseDTO> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable).map(BookResponseDTO::new);
+    }
+
+    @Transactional
+    public BookResponseDTO update(Long id, BookUpdateDTO data) {
+        Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        
+        data.title().ifPresent(book::setTitle);
+        data.pageCount().ifPresent(value -> book.setPageCount(value));
+        
+        data.authorId().ifPresent(value -> {
+            book.setAuthor(
+                authorRepository.findById(value)
+                    .orElseThrow(EntityNotFoundException::new)
+            );
+        });
+
+        return new BookResponseDTO(book);
     }
 
 
