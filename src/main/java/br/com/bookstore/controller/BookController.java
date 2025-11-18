@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,7 +35,10 @@ public class BookController {
     private BookService service;
 
     @GetMapping
-    public ResponseEntity<Page<BookResponseDTO>> findBooks(@RequestParam(value = "query") Optional<String> searchPattern, Pageable pageable) {
+    public ResponseEntity<Page<BookResponseDTO>> findBooks(
+        @RequestParam(value = "query") Optional<String> searchPattern, 
+        @PageableDefault(sort = "title", direction = Sort.Direction.ASC)
+        Pageable pageable) {
 
         if (searchPattern.isPresent()) {
             return ResponseEntity.ok(service.findByQuery(searchPattern.get(), pageable));
