@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.bookstore.dto.AuthorCreateDTO;
 import br.com.bookstore.dto.AuthorResponseDTO;
+import br.com.bookstore.dto.AuthorUpdateDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.repository.AuthorRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AuthorService {
@@ -31,5 +33,13 @@ public class AuthorService {
 
     public Page<AuthorResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
         return repository.findByQuery(searchPattern, pageable).map(AuthorResponseDTO::new);
+    }
+
+    @Transactional
+    public AuthorResponseDTO update(Long id, AuthorUpdateDTO data) {
+        Author author = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        data.name().ifPresent(author::setName);
+
+        return new AuthorResponseDTO(author);
     }
 }

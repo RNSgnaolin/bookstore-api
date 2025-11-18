@@ -1,5 +1,7 @@
 package br.com.bookstore.dto;
 
-public record AuthorUpdateDTO(String name) {
+import java.util.Optional;
+
+public record AuthorUpdateDTO(Optional<String> name) {
     
 }

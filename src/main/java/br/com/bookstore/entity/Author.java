@@ -9,11 +9,13 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "Author")
 @Table(name = "authors")
 @Getter
+@Setter
 public class Author {
 
     public Author(AuthorCreateDTO data) {
