@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.bookstore.dto.AuthorCreateDTO;
 import br.com.bookstore.dto.AuthorResponseDTO;
+import br.com.bookstore.dto.AuthorUpdateDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.service.AuthorService;
 import jakarta.validation.Valid;
@@ -46,5 +49,10 @@ public class AuthorController {
         var uri = builder.path("/authors/{id}").buildAndExpand(author.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new AuthorResponseDTO(author));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AuthorResponseDTO> updateAuthor(@PathVariable Long id, @RequestBody AuthorUpdateDTO data) {
+        return ResponseEntity.ok(service.update(id, data));
     }
 }
