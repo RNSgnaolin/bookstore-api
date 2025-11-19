@@ -22,8 +22,7 @@ create table books(
 
     constraint fk_books_author_id
         foreign key(author_id) 
-        references authors(id)
-        on delete cascade,
+        references authors(id),
 
     index idx_books_author_id (author_id)
 );
