@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Book;
 import br.com.bookstore.service.BookService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/books")
@@ -60,6 +62,12 @@ public class BookController {
     @PatchMapping("/{id}")
     public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @RequestBody BookUpdateDTO data) {
         return ResponseEntity.ok(service.update(id, data));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BookResponseDTO> deleteBook(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

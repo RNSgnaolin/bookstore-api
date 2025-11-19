@@ -56,5 +56,11 @@ public class BookService {
         return new BookResponseDTO(book);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        book.setDeleted(true);
+    }
+
 
 }
