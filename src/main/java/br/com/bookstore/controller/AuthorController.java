@@ -47,6 +47,11 @@ public class AuthorController {
         return ResponseEntity.ok(service.findAll(pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AuthorResponseDTO> findAuthor(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
     @PostMapping
     public ResponseEntity<AuthorResponseDTO> createAuthor(@RequestBody @Valid AuthorCreateDTO data, UriComponentsBuilder builder) {
 

@@ -27,6 +27,11 @@ public class AuthorService {
         return repository.save(author);
     }
 
+    public AuthorResponseDTO findById(Long id) {
+        return repository.findById(id).map(AuthorResponseDTO::new)
+            .orElseThrow(EntityNotFoundException::new);
+    }
+
     public Page<AuthorResponseDTO> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(AuthorResponseDTO::new);
     }

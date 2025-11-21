@@ -31,6 +31,11 @@ public class BookService {
         return bookRepository.save(new Book(data.title().trim(), author, data.pageCount()));
     }
 
+    public BookResponseDTO findById(Long id) {
+        return bookRepository.findById(id).map(BookResponseDTO::new)
+            .orElseThrow(EntityNotFoundException::new);
+    }
+
     public Page<BookResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
         return bookRepository.findByQuery(searchPattern, pageable).map(BookResponseDTO::new);
     }

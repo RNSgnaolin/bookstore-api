@@ -49,6 +49,11 @@ public class BookController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BookResponseDTO> findBook(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
     @PostMapping
     public ResponseEntity<BookResponseDTO> createBook(@RequestBody @Valid BookCreateDTO data, UriComponentsBuilder builder) {
         
