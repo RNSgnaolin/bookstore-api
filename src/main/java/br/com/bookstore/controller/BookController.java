@@ -24,7 +24,6 @@ import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Book;
 import br.com.bookstore.service.BookService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/books")
