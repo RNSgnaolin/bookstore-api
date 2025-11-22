@@ -11,6 +11,7 @@ create table books(
     id bigint not null auto_increment,
     author_id bigint not null,
     title varchar(255) not null,
+    price decimal(10, 2) not null,
     page_count int not null,
     stock int not null,
     deleted boolean not null default false,

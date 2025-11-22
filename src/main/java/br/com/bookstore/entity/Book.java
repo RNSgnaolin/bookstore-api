@@ -1,5 +1,7 @@
 package br.com.bookstore.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,9 +24,10 @@ import lombok.Setter;
 @Setter
 public class Book {
 
-    public Book(String title, Author author, int pageCount) {
+    public Book(String title, Author author, BigDecimal price, int pageCount) {
         this.title = title;
         this.author = author;
+        this.price = price;
         this.stock = 0;
         this.pageCount = pageCount;
     }
@@ -34,6 +37,7 @@ public class Book {
     private Long id;
 
     private String title;
+    private BigDecimal price;
 
     @Column(name = "page_count")
     private int pageCount;

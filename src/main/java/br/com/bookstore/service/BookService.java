@@ -28,7 +28,7 @@ public class BookService {
     @Transactional
     public Book create(BookCreateDTO data) {
         Author author = authorRepository.findById(data.authorId()).orElseThrow(EntityNotFoundException::new);
-        return bookRepository.save(new Book(data.title().trim(), author, data.pageCount()));
+        return bookRepository.save(new Book(data.title().trim(), author, data.price(), data.pageCount()));
     }
 
     public BookResponseDTO findById(Long id) {
@@ -49,7 +49,8 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         
         data.title().ifPresent(book::setTitle);
-        data.pageCount().ifPresent(value -> book.setPageCount(value));
+        data.pageCount().ifPresent(p -> book.setPageCount(p));
+        data.price().ifPresent(book::setPrice);
         
         data.authorId().ifPresent(value -> {
             book.setAuthor(
