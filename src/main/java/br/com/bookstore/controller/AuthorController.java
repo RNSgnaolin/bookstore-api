@@ -1,8 +1,11 @@
 package br.com.bookstore.controller;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -45,6 +48,18 @@ public class AuthorController {
         }
 
         return ResponseEntity.ok(service.findAll(pageable));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<AuthorResponseDTO>> findAuthorsList(@RequestParam(value = "query") Optional<String> searchPattern) {
+        
+        if (searchPattern.isPresent()) {
+            return ResponseEntity.ok(
+                service.findByQuery(searchPattern.get(), PageRequest.of(0, 30))
+                .toList());
+        }
+
+        return ResponseEntity.ok(service.findAll(PageRequest.of(0, 30)).toList());
     }
 
     @GetMapping("/{id}")
