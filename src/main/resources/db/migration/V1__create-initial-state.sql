@@ -20,10 +20,17 @@ create table books(
     constraint pk_books_id primary key(id),
     constraint chk_books_stock_positive check (stock >= 0),
     constraint chk_books_pages_positive check (page_count > 0),
-
-    constraint fk_books_author_id
-        foreign key(author_id) 
-        references authors(id),
+    constraint fk_books_author_id foreign key(author_id) references authors(id),
 
     index idx_books_author_id (author_id)
+);
+
+create table users(
+    id bigint not null auto_increment,
+    name varchar(255) not null,
+    login varchar(255) not null,
+    password varchar(255) not null,
+
+    constraint pk_users_id primary key(id),
+    constraint uidx_books_login unique(login)
 );
