@@ -1,5 +1,7 @@
 package br.com.bookstore.service;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,18 +48,26 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO update(Long id, BookUpdateDTO data) {
+
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        Optional.ofNullable(data.title())
+            .filter(d -> !d.isBlank())
+            .ifPresent(book::setTitle);
+
+        Optional.ofNullable(data.pageCount())
+            .ifPresent(d -> book.setPageCount(d));
+
+        Optional.ofNullable(data.price())
+            .ifPresent(book::setPrice);
         
-        data.title().ifPresent(book::setTitle);
-        data.pageCount().ifPresent(p -> book.setPageCount(p));
-        data.price().ifPresent(book::setPrice);
-        
-        data.authorId().ifPresent(value -> {
-            book.setAuthor(
-                authorRepository.findById(value)
-                    .orElseThrow(EntityNotFoundException::new)
+        Optional.ofNullable(data.authorId())
+            .ifPresent(value -> 
+                book.setAuthor(
+                    authorRepository.findById(value)
+                    .orElseThrow(EntityNotFoundException::new)  
+                )
             );
-        });
 
         return new BookResponseDTO(book);
     }

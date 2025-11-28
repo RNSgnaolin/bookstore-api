@@ -1,5 +1,7 @@
 package br.com.bookstore.service;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,10 @@ public class AuthorService {
     @Transactional
     public AuthorResponseDTO update(Long id, AuthorUpdateDTO data) {
         Author author = repository.findById(id).orElseThrow(EntityNotFoundException::new);
-        data.name().ifPresent(author::setName);
+        
+        Optional.ofNullable(data.name())
+            .filter(d -> !d.isBlank())
+            .ifPresent(author::setName);
 
         return new AuthorResponseDTO(author);
     }
