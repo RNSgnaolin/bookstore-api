@@ -1,7 +1,6 @@
 package br.com.bookstore.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,25 +38,22 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<Page<BookResponseDTO>> findBooks(
-        @RequestParam(value = "query") Optional<String> searchPattern, 
+        @RequestParam(value = "query", required = false) String searchPattern, 
         @PageableDefault(sort = "title", direction = Sort.Direction.ASC)
         Pageable pageable) {
 
-        if (searchPattern.isPresent()) {
-            return ResponseEntity.ok(service.findByQuery(searchPattern.get(), pageable));
-        }
+        if (searchPattern != null) 
+            return ResponseEntity.ok(service.findByQuery(searchPattern, pageable));
 
         return ResponseEntity.ok(service.findAll(pageable));
 
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<BookResponseDTO>> findBookList(@RequestParam(value = "query") Optional<String> searchPattern) {
+    public ResponseEntity<List<BookResponseDTO>> findBookList(@RequestParam(value = "query", required = false) String searchPattern) {
         
-        if (searchPattern.isPresent()) {
-            return ResponseEntity.ok(
-                service.findByQuery(searchPattern.get(), PageRequest.of(0, 30))
-                .toList());
+        if (searchPattern != null) {
+            return ResponseEntity.ok(service.findByQuery(searchPattern, PageRequest.of(0, 30)).toList());
         }
 
         return ResponseEntity.ok(service.findAll(PageRequest.of(0, 30)).toList());
