@@ -30,8 +30,9 @@ public class AuthorService {
     }
 
     public AuthorResponseDTO findById(Long id) {
+
         return repository.findById(id).map(AuthorResponseDTO::new)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
     }
 
     public Page<AuthorResponseDTO> findAll(Pageable pageable) {
@@ -44,7 +45,9 @@ public class AuthorService {
 
     @Transactional
     public AuthorResponseDTO update(Long id, AuthorUpdateDTO data) {
-        Author author = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        Author author = repository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
         
         Optional.ofNullable(data.name())
             .filter(d -> !d.isBlank())

@@ -23,7 +23,7 @@ public class UserService {
     @Transactional
     public UserResponseDTO update (Long id, UserUpdateDTO data) {
         
-        User user = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        User user = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
 
         Optional.ofNullable(data.name())
             .filter(d -> !d.isBlank())
@@ -42,7 +42,7 @@ public class UserService {
     }
 
     public UserResponseDTO findById (Long id) {
-        User user = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        User user = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
         return new UserResponseDTO(user);
     }
 

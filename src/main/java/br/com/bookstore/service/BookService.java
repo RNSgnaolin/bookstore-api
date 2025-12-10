@@ -29,13 +29,13 @@ public class BookService {
 
     @Transactional
     public Book create(BookCreateDTO data) {
-        Author author = authorRepository.findById(data.authorId()).orElseThrow(EntityNotFoundException::new);
+        Author author = authorRepository.findById(data.authorId()).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + data.authorId()));
         return bookRepository.save(new Book(data.title().trim(), author, data.price(), data.pageCount()));
     }
 
     public BookResponseDTO findById(Long id) {
         return bookRepository.findById(id).map(BookResponseDTO::new)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
     }
 
     public Page<BookResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
@@ -49,7 +49,7 @@ public class BookService {
     @Transactional
     public BookResponseDTO update(Long id, BookUpdateDTO data) {
 
-        Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
 
         Optional.ofNullable(data.title())
             .filter(d -> !d.isBlank())
@@ -65,7 +65,7 @@ public class BookService {
             .ifPresent(value -> 
                 book.setAuthor(
                     authorRepository.findById(value)
-                    .orElseThrow(EntityNotFoundException::new)  
+                    .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + value))  
                 )
             );
 
@@ -74,7 +74,7 @@ public class BookService {
 
     @Transactional
     public void delete(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
         book.setDeleted(true);
     }
 
