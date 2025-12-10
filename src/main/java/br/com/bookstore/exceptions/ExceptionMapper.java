@@ -23,6 +23,15 @@ public class ExceptionMapper {
         return errors;
     }
 
+    private static final Map<String, Map.Entry<String, String>> CONSTRAINTS = Map.of(
+        "uq_book_title_author", Map.entry("title", "Título já existente para o autor indicado"),
+        "uidx_authors_name",    Map.entry("name",  "Um autor com este nome já existe"),
+        "uidx_users_login",     Map.entry("login", "Login já sendo utilizado"),
+        "chk_books_stock_positive", Map.entry("stock", "O estoque deve ser zero ou positivo"),
+        "chk_books_pages_positive", Map.entry("pageCount", "O número de páginas deve ser maior que zero"),
+        "chk_books_price_positive", Map.entry("price", "O preço deve ser maior que zero")
+    );
+
     public Map<String, String> handleException(EntityNotFoundException ex) {
         return Map.of("id", ex.getMessage());
     }
@@ -34,26 +43,13 @@ public class ExceptionMapper {
 
         Map<String, String> errors = new HashMap<>();
 
-        if (msg.contains("uq_book_title_author")) {
-            errors.put("title", "Título já existente para o autor indicado");
-        } 
-        else if (msg.contains("uidx_authors_name")) {
-            errors.put("name", "Um autor com este nome já existe");
-        }
-        else if (msg.contains("uidx_users_login")) {
-            errors.put("login", "Login já sendo utilizado");
-        }
+        CONSTRAINTS.forEach((constraint, fieldMessage) -> {
+            if (msg.contains(constraint)) {
+                errors.put(fieldMessage.getKey(), fieldMessage.getValue());
+            }
+        });
 
-        else if (msg.contains("chk_books_stock_positive")) {
-            errors.put("stock", "O estoque deve ser zero ou positivo");
-        }
-        else if (msg.contains("chk_books_pages_positive")) {
-            errors.put("pageCount", "O número de páginas deve ser maior que zero");
-        }
-
-        else {
-            errors.put("database", "Uma regra do banco de dados foi violada");
-        }
+        if (errors.isEmpty()) errors.put("database", "Uma regra do banco de dados foi violada");
 
         return errors;
     }
