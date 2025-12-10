@@ -32,5 +32,5 @@ create table users(
     password varchar(255) not null,
 
     constraint pk_users_id primary key(id),
-    constraint uidx_books_login unique(login)
+    constraint uidx_users_login unique(login)
 );
