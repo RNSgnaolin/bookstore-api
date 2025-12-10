@@ -27,14 +27,14 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
             HttpStatus.NOT_FOUND.value(),
             request.getRequestURI(),
-            Map.of("id", ex.getMessage())
+            mapper.handleException(ex)
         );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequest(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
         ErrorResponse error = new ErrorResponse(
             HttpStatus.BAD_REQUEST.value(),
