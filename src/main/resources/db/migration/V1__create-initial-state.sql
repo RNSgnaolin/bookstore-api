@@ -20,6 +20,7 @@ create table books(
     constraint pk_books_id primary key(id),
     constraint chk_books_stock_positive check (stock >= 0),
     constraint chk_books_pages_positive check (page_count > 0),
+    constraint chk_books_price_positive check (price > 0),
     constraint fk_books_author_id foreign key(author_id) references authors(id),
 
     index idx_books_author_id (author_id)
