@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
 
+/*
+    Classe usada para retornar no corpo de um ResponseEntity para que erros sejam legíveis
+*/
 @Getter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ErrorResponse {

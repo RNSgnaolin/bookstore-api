@@ -14,23 +14,31 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 import jakarta.persistence.EntityNotFoundException;
 
+/*
+    Classe usada para mapear as exceções em campos de erros legíveis no construtor da classe ErrorResponse
+    Chamada em GlobalExceptionHandler
+*/
 @Component
 public class ExceptionMapper {
+
+    /*
+        Constraints do Banco de Dados. O Map é analisado em DataIntegrityViolationException
+        Evita parsing ou if/else excessivo, basta adicionar novos constraints no Map para ser detectados
+    */
+    private static final Map<String, Map.Entry<String, String>> CONSTRAINTS = Map.of(
+        "uq_book_title_author",     Map.entry("title", "Título já existente para o autor indicado"),
+        "uidx_authors_name",        Map.entry("name",  "Um autor com este nome já existe"),
+        "uidx_users_login",         Map.entry("login", "Login já sendo utilizado"),
+        "chk_books_stock_positive", Map.entry("stock", "O estoque deve ser zero ou positivo"),
+        "chk_books_pages_positive", Map.entry("pageCount", "O número de páginas deve ser maior que zero"),
+        "chk_books_price_positive", Map.entry("price", "O preço deve ser maior que zero")
+    );
 
     public Map<String, String> handleException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(field -> errors.put(field.getField(), field.getDefaultMessage()));
         return errors;
     }
-
-    private static final Map<String, Map.Entry<String, String>> CONSTRAINTS = Map.of(
-        "uq_book_title_author", Map.entry("title", "Título já existente para o autor indicado"),
-        "uidx_authors_name",    Map.entry("name",  "Um autor com este nome já existe"),
-        "uidx_users_login",     Map.entry("login", "Login já sendo utilizado"),
-        "chk_books_stock_positive", Map.entry("stock", "O estoque deve ser zero ou positivo"),
-        "chk_books_pages_positive", Map.entry("pageCount", "O número de páginas deve ser maior que zero"),
-        "chk_books_price_positive", Map.entry("price", "O preço deve ser maior que zero")
-    );
 
     public Map<String, String> handleException(EntityNotFoundException ex) {
         return Map.of("id", ex.getMessage());

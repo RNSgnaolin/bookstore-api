@@ -22,60 +22,70 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
 
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
         ErrorResponse error = new ErrorResponse(
-            HttpStatus.NOT_FOUND.value(),
+            status.value(),
             request.getRequestURI(),
             mapper.handleException(ex)
         );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
         ErrorResponse error = new ErrorResponse(
-            HttpStatus.BAD_REQUEST.value(),
+            status.value(),
             request.getRequestURI(),
             mapper.handleException(ex)
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
 
+        HttpStatus status = HttpStatus.CONFLICT;
+
         ErrorResponse error = new ErrorResponse(
-            HttpStatus.CONFLICT.value(),
+            status.value(),
             request.getRequestURI(),
             mapper.handleException(ex)
         );
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
 
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
         ErrorResponse error = new ErrorResponse(
-            HttpStatus.BAD_REQUEST.value(),
+            status.value(),
             request.getRequestURI(),
             mapper.handleException(ex)
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBind(BindException ex, HttpServletRequest request) {
 
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
         ErrorResponse error = new ErrorResponse(
-            HttpStatus.BAD_REQUEST.value(),
+            status.value(),
             request.getRequestURI(),
             mapper.handleException(ex)
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 }
