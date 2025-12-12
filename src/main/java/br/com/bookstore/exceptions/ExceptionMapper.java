@@ -5,12 +5,14 @@ import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -34,6 +36,22 @@ public class ExceptionMapper {
         "chk_books_price_positive", Map.entry("price", "O preço deve ser maior que zero")
     );
 
+    private Map<String, String> resolveConstraintErrors(Throwable ex) {
+
+        Map<String, String> errors = new HashMap<>();
+        String msg = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "unknown";
+
+        CONSTRAINTS.forEach((constraint, fieldMessage) -> {
+            if (msg.contains(constraint)) {
+                errors.put(fieldMessage.getKey(), fieldMessage.getValue());
+            }
+        });
+
+        if (errors.isEmpty()) errors.put("database", "Uma regra do banco de dados foi violada");
+
+        return errors;
+    }
+
     public Map<String, String> handleException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(field -> errors.put(field.getField(), field.getDefaultMessage()));
@@ -45,21 +63,11 @@ public class ExceptionMapper {
     }
 
     public Map<String, String> handleException(DataIntegrityViolationException ex) {
+        return resolveConstraintErrors(ex);
+    }
 
-        String msg = ex.getMostSpecificCause() != null ? 
-        ex.getMostSpecificCause().getMessage().toLowerCase() : ex.getMessage().toLowerCase();
-
-        Map<String, String> errors = new HashMap<>();
-
-        CONSTRAINTS.forEach((constraint, fieldMessage) -> {
-            if (msg.contains(constraint)) {
-                errors.put(fieldMessage.getKey(), fieldMessage.getValue());
-            }
-        });
-
-        if (errors.isEmpty()) errors.put("database", "Uma regra do banco de dados foi violada");
-
-        return errors;
+    public Map<String, String> handleException(JpaSystemException ex) {
+        return resolveConstraintErrors(ex);
     }
 
     public Map<String, String> handleException(BindException ex) {
