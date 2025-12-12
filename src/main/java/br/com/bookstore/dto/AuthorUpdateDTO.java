@@ -1,5 +1,9 @@
 package br.com.bookstore.dto;
 
-public record AuthorUpdateDTO(String name) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record AuthorUpdateDTO(
+    @Schema(example = "George R. R. Martin")
+    String name) {
     
 }

@@ -2,6 +2,7 @@ package br.com.bookstore.controller;
 
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,12 @@ import br.com.bookstore.dto.AuthorCreateDTO;
 import br.com.bookstore.dto.AuthorResponseDTO;
 import br.com.bookstore.dto.AuthorUpdateDTO;
 import br.com.bookstore.entity.Author;
+import br.com.bookstore.exceptions.ErrorResponse;
 import br.com.bookstore.service.AuthorService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,10 +42,11 @@ public class AuthorController {
     private AuthorService service;
 
     @GetMapping
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<Page<AuthorResponseDTO>> findAuthors(
         @RequestParam(value = "query", required = false) String searchPattern,
         @PageableDefault(sort = "name", direction = Sort.Direction.ASC)
-        Pageable pageable) {
+        @ParameterObject Pageable pageable) {
 
         if (searchPattern != null) {
             return ResponseEntity.ok(service.findByQuery(searchPattern, pageable));
@@ -49,6 +56,7 @@ public class AuthorController {
     }
 
     @GetMapping("/list")
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<List<AuthorResponseDTO>> findAuthorsList(@RequestParam(value = "query", required = false) String searchPattern) {
         
         if (searchPattern != null) {
@@ -61,11 +69,20 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity<AuthorResponseDTO> findAuthor(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
+    @ApiResponses({
+        @ApiResponse(responseCode = "201"),
+        @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "409", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<AuthorResponseDTO> createAuthor(@RequestBody @Valid AuthorCreateDTO data, UriComponentsBuilder builder) {
 
         Author author = service.create(data);
@@ -75,6 +92,11 @@ public class AuthorController {
     }
 
     @PatchMapping("/{id}")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "409", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<AuthorResponseDTO> updateAuthor(@PathVariable Long id, @RequestBody AuthorUpdateDTO data) {
         return ResponseEntity.ok(service.update(id, data));
     }
