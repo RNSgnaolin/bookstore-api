@@ -8,7 +8,7 @@ A REST API of a fictitious bookstore, created for portfolio purposes, containing
 
 ### Backend
 * Java 21
-* Spring Boot 3.5.7 (Web, Data JPA)
+* Spring Boot 3.4.12 (Web, Data JPA)
 * Lombok
 
 ### Database / Migration
@@ -17,6 +17,9 @@ A REST API of a fictitious bookstore, created for portfolio purposes, containing
 
 ### Dependencies
 * Maven
+
+### Documentation
+* Springdoc OpenAPI 2.8.14
 
 ## 📑 Project Description
 

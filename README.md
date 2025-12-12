@@ -10,7 +10,7 @@ Uma API REST de uma livraria fictícia, criada para propósitos de portfólio, q
 
 ### Backend
 * Java 21
-* Spring Boot 3.5.7 (Web, Data JPA)
+* Spring Boot 3.4.12 (Web, Data JPA)
 * Lombok
 
 ### Banco de Dados / Migração
@@ -19,6 +19,9 @@ Uma API REST de uma livraria fictícia, criada para propósitos de portfólio, q
 
 ### Dependências
 * Maven
+
+### Documentação
+* Springdoc OpenAPI 2.8.14
 
 ## 📑 Descrição do Projeto
 
