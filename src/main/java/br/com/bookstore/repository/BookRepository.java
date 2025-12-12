@@ -20,6 +20,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             """)
     public Page<Book> findByQuery(@Param("pattern") String searchPattern, Pageable pageable);
 
+    public Page<Book> findByAuthorId(Long id, Pageable pageable);
+
     @Query("""
         SELECT b FROM Book b JOIN b.author a
         WHERE (

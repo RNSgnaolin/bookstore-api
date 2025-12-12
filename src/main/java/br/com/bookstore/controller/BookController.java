@@ -64,6 +64,13 @@ public class BookController {
         return ResponseEntity.ok(service.findById(id));
     }
 
+    @GetMapping("/author/{id}")
+    public ResponseEntity<Page<BookResponseDTO>> findBookByAuthor(@PathVariable Long id, 
+        @PageableDefault(sort = "title", direction = Sort.Direction.ASC) Pageable pageable) {
+            
+        return ResponseEntity.ok(service.findByAuthor(id, pageable));
+    }
+
     @PostMapping
     public ResponseEntity<BookResponseDTO> createBook(@RequestBody @Valid BookCreateDTO data, UriComponentsBuilder builder) {
         

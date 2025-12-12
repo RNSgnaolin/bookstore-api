@@ -42,6 +42,10 @@ public class BookService {
         return bookRepository.findByQuery(searchPattern, pageable).map(BookResponseDTO::new);
     }
 
+    public Page<BookResponseDTO> findByAuthor(Long id, Pageable pageable) {
+        return bookRepository.findByAuthorId(id, pageable).map(BookResponseDTO::new);
+    }
+
     public Page<BookResponseDTO> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable).map(BookResponseDTO::new);
     }
