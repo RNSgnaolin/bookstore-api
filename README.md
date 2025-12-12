@@ -1,6 +1,6 @@
 # Bookstore API
 ![Badge in Development](https://img.shields.io/badge/status-in_development-red)
-![Last Commit](https://img.shields.io/github/last-commit/RNSgnaolin/saaa-api)
+![Last Commit](https://img.shields.io/github/last-commit/RNSgnaolin/bookstore-api)
 
 *For the english version, [click here](README_en-US.md)*
 
