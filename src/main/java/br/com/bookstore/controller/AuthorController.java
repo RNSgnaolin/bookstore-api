@@ -25,6 +25,8 @@ import br.com.bookstore.dto.AuthorUpdateDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.exceptions.ErrorResponse;
 import br.com.bookstore.service.AuthorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,6 +46,7 @@ public class AuthorController {
     @GetMapping
     @ApiResponse(responseCode = "200")
     public ResponseEntity<Page<AuthorResponseDTO>> findAuthors(
+        @Parameter(description = "Filtro com base no nome do autor", example = "Martin")
         @RequestParam(value = "query", required = false) String searchPattern,
         @PageableDefault(sort = "name", direction = Sort.Direction.ASC)
         @ParameterObject Pageable pageable) {
@@ -57,7 +60,10 @@ public class AuthorController {
 
     @GetMapping("/list")
     @ApiResponse(responseCode = "200")
-    public ResponseEntity<List<AuthorResponseDTO>> findAuthorsList(@RequestParam(value = "query", required = false) String searchPattern) {
+    @Operation(description = "Lista de autores sem paginação, útil para popular UI")
+    public ResponseEntity<List<AuthorResponseDTO>> findAuthorsList(
+        @Parameter(description = "Filtro com base no nome do autor", example = "Martin")
+        @RequestParam(value = "query", required = false) String searchPattern) {
         
         if (searchPattern != null) {
             return ResponseEntity.ok(

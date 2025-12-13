@@ -26,6 +26,8 @@ import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Book;
 import br.com.bookstore.exceptions.ErrorResponse;
 import br.com.bookstore.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,6 +47,7 @@ public class BookController {
     @GetMapping
     @ApiResponse(responseCode = "200")
     public ResponseEntity<Page<BookResponseDTO>> findBooks(
+        @Parameter(description = "Filtro com base no título do livro ou nome do autor", example = "Game of")
         @RequestParam(value = "query", required = false) String searchPattern, 
         @PageableDefault(sort = "title", direction = Sort.Direction.ASC)
         @ParameterObject Pageable pageable) {
@@ -58,7 +61,11 @@ public class BookController {
 
     @GetMapping("/list")
     @ApiResponse(responseCode = "200")
-    public ResponseEntity<List<BookResponseDTO>> findBookList(@RequestParam(value = "query", required = false) String searchPattern) {
+    @Operation(description = "Lista de livros sem paginação, útil para popular UI")
+    public ResponseEntity<List<BookResponseDTO>> findBookList(
+        @Parameter(description = "Filtro com base no título do livro ou nome do autor", example = "Game of")
+        @RequestParam(value = "query", required = false) String searchPattern
+    ) {
         
         if (searchPattern != null) {
             return ResponseEntity.ok(service.findByQuery(searchPattern, PageRequest.of(0, 30)).toList());
@@ -103,6 +110,7 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
+    @Operation(description = "Atualiza um livro com o ID providenciado no endereço. Os campos no corpo do JSON não são mandatórios, pode-se enviar apenas o que quer ser atualizado.")
     @ApiResponses({
         @ApiResponse(responseCode = "200"),
         @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json")),
