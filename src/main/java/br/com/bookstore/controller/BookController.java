@@ -114,7 +114,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @ApiResponses({
-        @ApiResponse(responseCode = "204"),
+        @ApiResponse(responseCode = "204", content = @Content),
         @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<BookResponseDTO> deleteBook(@PathVariable Long id) {
