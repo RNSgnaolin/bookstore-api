@@ -60,7 +60,7 @@ public class AuthorController {
 
     @GetMapping("/list")
     @ApiResponse(responseCode = "200")
-    @Operation(description = "Lista de autores sem paginação, útil para popular UI")
+    @Operation(summary = "Retorna uma lista sem paginação de autores", description = "Útil para popular menus de seleção. Retorna um máximo de 30 elementos")
     public ResponseEntity<List<AuthorResponseDTO>> findAuthorsList(
         @Parameter(description = "Filtro com base no nome do autor", example = "Martin")
         @RequestParam(value = "query", required = false) String searchPattern) {

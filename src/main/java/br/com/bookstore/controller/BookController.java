@@ -61,7 +61,7 @@ public class BookController {
 
     @GetMapping("/list")
     @ApiResponse(responseCode = "200")
-    @Operation(description = "Lista de livros sem paginação, útil para popular UI")
+    @Operation(summary = "Retorna uma lista de livros sem paginação", description = "Útil para popular menus de seleção. Retorna um máximo de 30 elementos")
     public ResponseEntity<List<BookResponseDTO>> findBookList(
         @Parameter(description = "Filtro com base no título do livro ou nome do autor", example = "Game of")
         @RequestParam(value = "query", required = false) String searchPattern
