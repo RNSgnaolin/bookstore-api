@@ -2,7 +2,6 @@ package br.com.bookstore.controller;
 
 import java.util.List;
 
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,11 +45,20 @@ public class BookController {
 
     @GetMapping
     @ApiResponse(responseCode = "200")
+    @Operation(summary = "Retorna uma lista paginada de livros", description = """
+            Paginação:
+
+            - page: índice da página (baseado em zero; padrão: 0)
+            - size: quantidade de registros por página (padrão: 30)
+            - sort: critério de ordenação no formato campo,asc|desc (padrão: title,asc)
+
+            Exemplo: /books?query=Game+of&page=2&size=10
+            """)
     public ResponseEntity<Page<BookResponseDTO>> findBooks(
-        @Parameter(description = "Filtro com base no título do livro ou nome do autor", example = "Game of")
+        @Parameter(description = "Filtro opcional com base no título do livro ou nome do autor", example = "Game of")
         @RequestParam(value = "query", required = false) String searchPattern, 
         @PageableDefault(sort = "title", direction = Sort.Direction.ASC)
-        @ParameterObject Pageable pageable) {
+        @Parameter(hidden = true) Pageable pageable) {
 
         if (searchPattern != null) 
             return ResponseEntity.ok(service.findByQuery(searchPattern, pageable));
@@ -88,9 +96,19 @@ public class BookController {
         @ApiResponse(responseCode = "200"),
         @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<Page<BookResponseDTO>> findBookByAuthor(@PathVariable Long id, 
+        @Operation(summary = "Retorna uma lista paginada de livros de um autor específico", description = """
+            Paginação:
+
+            - page: índice da página (baseado em zero; padrão: 0)
+            - size: quantidade de registros por página (padrão: 30)
+            - sort: critério de ordenação no formato campo,asc|desc (padrão: title,asc)
+
+            Exemplo: /books/author/1?sort=pageCount,asc
+            """)
+    public ResponseEntity<Page<BookResponseDTO>> findBookByAuthor(
+        @Parameter(description = "ID do autor", example = "1") @PathVariable Long id, 
         @PageableDefault(sort = "title", direction = Sort.Direction.ASC) 
-        @ParameterObject Pageable pageable) {
+        @Parameter(hidden = true) Pageable pageable) {
             
         return ResponseEntity.ok(service.findByAuthor(id, pageable));
     }

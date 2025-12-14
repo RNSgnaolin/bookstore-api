@@ -2,7 +2,6 @@ package br.com.bookstore.controller;
 
 import java.util.List;
 
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,11 +44,22 @@ public class AuthorController {
 
     @GetMapping
     @ApiResponse(responseCode = "200")
+    @Operation(summary = "Retorna uma lista paginada de autores", description = """
+            Paginação:
+
+            - page: índice da página (baseado em zero; padrão: 0)
+            - size: quantidade de registros por página (padrão: 30)
+            - sort: critério de ordenação no formato campo,asc|desc (padrão: name,asc)
+
+            Exemplo: 
+
+            /authors?query=George+R&page=2&size=10
+            """)
     public ResponseEntity<Page<AuthorResponseDTO>> findAuthors(
-        @Parameter(description = "Filtro com base no nome do autor", example = "Martin")
+        @Parameter(description = "Filtro opcional com base no nome do autor", example = "Martin")
         @RequestParam(value = "query", required = false) String searchPattern,
         @PageableDefault(sort = "name", direction = Sort.Direction.ASC)
-        @ParameterObject Pageable pageable) {
+        @Parameter(hidden = true) Pageable pageable) {
 
         if (searchPattern != null) {
             return ResponseEntity.ok(service.findByQuery(searchPattern, pageable));
@@ -60,7 +70,7 @@ public class AuthorController {
 
     @GetMapping("/list")
     @ApiResponse(responseCode = "200")
-    @Operation(summary = "Retorna uma lista sem paginação de autores", description = "Útil para popular menus de seleção. Retorna um máximo de 30 elementos")
+    @Operation(summary = "Retorna uma lista de autores sem paginação", description = "Útil para popular menus de seleção. Retorna um máximo de 30 elementos")
     public ResponseEntity<List<AuthorResponseDTO>> findAuthorsList(
         @Parameter(description = "Filtro com base no nome do autor", example = "Martin")
         @RequestParam(value = "query", required = false) String searchPattern) {
