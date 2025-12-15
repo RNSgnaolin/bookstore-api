@@ -23,7 +23,7 @@ import br.com.bookstore.dto.BookCreateDTO;
 import br.com.bookstore.dto.BookResponseDTO;
 import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Book;
-import br.com.bookstore.exceptions.ErrorResponse;
+import br.com.bookstore.exceptions.mapper.ErrorResponse;
 import br.com.bookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
