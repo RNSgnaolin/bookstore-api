@@ -1,7 +1,7 @@
 package br.com.bookstore.exceptions.domain;
 
 public class BookNotFoundException extends EntityFieldNotFoundException {
-    public BookNotFoundException(String fieldName, String fieldValue) {
+    public BookNotFoundException(String fieldValue, String fieldName) {
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
     }

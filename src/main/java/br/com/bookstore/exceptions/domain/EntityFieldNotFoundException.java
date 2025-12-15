@@ -20,6 +20,6 @@ public abstract class EntityFieldNotFoundException extends EntityNotFoundExcepti
 
     @Override
     public String getMessage() {
-        return "Valor " + getFieldValue() + "não encontrado para entidade " + getEntity();
+        return "Valor " + getFieldValue() + " não encontrado para entidade " + getEntity();
     }
 }
