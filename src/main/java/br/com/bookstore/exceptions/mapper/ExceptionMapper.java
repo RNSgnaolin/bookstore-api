@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
+import br.com.bookstore.exceptions.domain.EntityFieldNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 
 /*
@@ -54,6 +55,12 @@ public class ExceptionMapper {
     public Map<String, String> handleException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(field -> errors.put(field.getField(), field.getDefaultMessage()));
+        return errors;
+    }
+
+    public Map<String, String> handleException(EntityFieldNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put(ex.getFieldName(), ex.getMessage());
         return errors;
     }
 

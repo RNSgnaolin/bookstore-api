@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.com.bookstore.exceptions.domain.EntityFieldNotFoundException;
 import br.com.bookstore.exceptions.mapper.ErrorResponse;
 import br.com.bookstore.exceptions.mapper.ExceptionMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +22,20 @@ import lombok.RequiredArgsConstructor;
 public class GlobalExceptionHandler {
     
     private final ExceptionMapper mapper;
+
+    @ExceptionHandler(EntityFieldNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityFieldNotFound(EntityFieldNotFoundException ex, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ErrorResponse response = new ErrorResponse(
+            status.value(),
+            request.getRequestURI(),
+            mapper.handleException(ex)
+        );
+
+        return ResponseEntity.status(status).body(response);
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
