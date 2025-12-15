@@ -1,5 +1,7 @@
 package br.com.bookstore.exceptions.handler;
 
+import java.util.Map;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,7 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
 
-        ErrorResponse response = new ErrorResponse(
-            status.value(),
-            request.getRequestURI(),
-            mapper.handleException(ex)
-        );
-
-        return ResponseEntity.status(status).body(response);
+        return buildResponse(status, mapper.handleException(ex), request);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -42,13 +38,7 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
 
-        ErrorResponse response = new ErrorResponse(
-            status.value(),
-            request.getRequestURI(),
-            mapper.handleException(ex)
-        );
-
-        return ResponseEntity.status(status).body(response);
+        return buildResponse(status, mapper.handleException(ex), request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -56,13 +46,7 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        ErrorResponse response = new ErrorResponse(
-            status.value(),
-            request.getRequestURI(),
-            mapper.handleException(ex)
-        );
-
-        return ResponseEntity.status(status).body(response);
+        return buildResponse(status, mapper.handleException(ex), request);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -70,13 +54,7 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.CONFLICT;
 
-        ErrorResponse response = new ErrorResponse(
-            status.value(),
-            request.getRequestURI(),
-            mapper.handleException(ex)
-        );
-
-        return ResponseEntity.status(status).body(response);
+        return buildResponse(status, mapper.handleException(ex), request);
     }
 
     @ExceptionHandler(JpaSystemException.class)
@@ -84,13 +62,7 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.CONFLICT;
 
-        ErrorResponse response = new ErrorResponse(
-            status.value(),
-            request.getRequestURI(),
-            mapper.handleException(ex)
-        );
-
-        return ResponseEntity.status(status).body(response);
+        return buildResponse(status, mapper.handleException(ex), request);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -98,13 +70,7 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        ErrorResponse response = new ErrorResponse(
-            status.value(),
-            request.getRequestURI(),
-            mapper.handleException(ex)
-        );
-
-        return ResponseEntity.status(status).body(response);
+        return buildResponse(status, mapper.handleException(ex), request);
     }
 
     @ExceptionHandler(BindException.class)
@@ -112,10 +78,15 @@ public class GlobalExceptionHandler {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
+        return buildResponse(status, mapper.handleException(ex), request);
+    }
+    
+    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, Map<String, String> errors, HttpServletRequest request) {
+
         ErrorResponse response = new ErrorResponse(
             status.value(),
             request.getRequestURI(),
-            mapper.handleException(ex)
+            errors
         );
 
         return ResponseEntity.status(status).body(response);
