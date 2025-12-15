@@ -1,0 +1,24 @@
+package br.com.bookstore.exceptions.domain;
+
+public class AuthorNotFoundException extends EntityFieldNotFoundException {
+    public AuthorNotFoundException(String fieldValue, String fieldName) {
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+    }
+
+    private String fieldName;
+    private String fieldValue;
+
+    public String getFieldName() {
+        return this.fieldName;
+    }
+
+    public String getFieldValue() {
+        return this.fieldValue;
+    }
+
+    public String getEntity() {
+        return "Author";
+    }
+    
+}

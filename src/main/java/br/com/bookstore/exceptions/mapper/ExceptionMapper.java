@@ -1,4 +1,4 @@
-package br.com.bookstore.exceptions;
+package br.com.bookstore.exceptions.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
