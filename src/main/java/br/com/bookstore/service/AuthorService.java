@@ -11,8 +11,8 @@ import br.com.bookstore.dto.AuthorCreateDTO;
 import br.com.bookstore.dto.AuthorResponseDTO;
 import br.com.bookstore.dto.AuthorUpdateDTO;
 import br.com.bookstore.entity.Author;
+import br.com.bookstore.exceptions.domain.AuthorNotFoundException;
 import br.com.bookstore.repository.AuthorRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AuthorService {
@@ -32,7 +32,7 @@ public class AuthorService {
     public AuthorResponseDTO findById(Long id) {
 
         return repository.findById(id).map(AuthorResponseDTO::new)
-            .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
+            .orElseThrow(() -> new AuthorNotFoundException(id.toString(), "id"));
     }
 
     public Page<AuthorResponseDTO> findAll(Pageable pageable) {
@@ -47,7 +47,7 @@ public class AuthorService {
     public AuthorResponseDTO update(Long id, AuthorUpdateDTO data) {
 
         Author author = repository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
+        .orElseThrow(() -> new AuthorNotFoundException(id.toString(), "id"));
         
         Optional.ofNullable(data.name())
             .filter(d -> !d.isBlank())

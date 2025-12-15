@@ -12,9 +12,10 @@ import br.com.bookstore.dto.BookResponseDTO;
 import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.entity.Book;
+import br.com.bookstore.exceptions.domain.AuthorNotFoundException;
+import br.com.bookstore.exceptions.domain.BookNotFoundException;
 import br.com.bookstore.repository.AuthorRepository;
 import br.com.bookstore.repository.BookRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class BookService {
@@ -29,13 +30,13 @@ public class BookService {
 
     @Transactional
     public Book create(BookCreateDTO data) {
-        Author author = authorRepository.findById(data.authorId()).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + data.authorId()));
+        Author author = authorRepository.findById(data.authorId()).orElseThrow(() -> new AuthorNotFoundException(data.authorId().toString(), "id"));
         return bookRepository.save(new Book(data.title().trim(), author, data.price(), data.pageCount()));
     }
 
     public BookResponseDTO findById(Long id) {
         return bookRepository.findById(id).map(BookResponseDTO::new)
-            .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
+            .orElseThrow(() -> new BookNotFoundException(id.toString(), "id"));
     }
 
     public Page<BookResponseDTO> findByQuery(String searchPattern, Pageable pageable) {
@@ -53,7 +54,7 @@ public class BookService {
     @Transactional
     public BookResponseDTO update(Long id, BookUpdateDTO data) {
 
-        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id.toString(), "id"));
 
         Optional.ofNullable(data.title())
             .filter(d -> !d.isBlank())
@@ -69,7 +70,7 @@ public class BookService {
             .ifPresent(value -> 
                 book.setAuthor(
                     authorRepository.findById(value)
-                    .orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + value))  
+                    .orElseThrow(() -> new AuthorNotFoundException(value.toString(), "id"))  
                 )
             );
 
@@ -78,7 +79,7 @@ public class BookService {
 
     @Transactional
     public void delete(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + id));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id.toString(), "id"));
         book.setDeleted(true);
     }
 
