@@ -65,7 +65,7 @@ public class ExceptionMapper {
     }
 
     public Map<String, String> handleException(EntityNotFoundException ex) {
-        return Map.of("id", ex.getMessage());
+        return Map.of("unknown", ex.getMessage());
     }
 
     public Map<String, String> handleException(DataIntegrityViolationException ex) {
