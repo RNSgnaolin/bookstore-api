@@ -132,4 +132,12 @@ public class ExceptionMapper {
         return errors;
     }
 
+    public Map<String, String> handleException(Exception ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        errors.put("body", "Um erro inesperado ocorreu");
+
+        return errors;
+    }
+
 }

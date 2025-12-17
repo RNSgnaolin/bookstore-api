@@ -80,6 +80,14 @@ public class GlobalExceptionHandler {
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleExceptionFallback(Exception ex, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return buildResponse(status, mapper.handleException(ex), request);
+    }
     
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, Map<String, String> errors, HttpServletRequest request) {
 
