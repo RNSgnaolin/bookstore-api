@@ -44,6 +44,7 @@ public class BookService {
     }
 
     public Page<BookResponseDTO> findByAuthor(Long id, Pageable pageable) {
+        if (!authorRepository.existsById(id)) throw new AuthorNotFoundException(id.toString(), "id");
         return bookRepository.findByAuthorId(id, pageable).map(BookResponseDTO::new);
     }
 
