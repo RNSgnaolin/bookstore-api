@@ -1,8 +1,5 @@
 package br.com.bookstore.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -24,7 +21,7 @@ import br.com.bookstore.repository.BookRepository;
 import br.com.bookstore.testutil.BookBuilder;
 
 @ExtendWith(MockitoExtension.class)
-public class BookServiceTest {
+class BookServiceTest {
 
     @Mock
     private BookRepository bookRepository;

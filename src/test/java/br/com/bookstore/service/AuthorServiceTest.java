@@ -18,7 +18,7 @@ import br.com.bookstore.exceptions.domain.AuthorNotFoundException;
 import br.com.bookstore.repository.AuthorRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthorServiceTest {
+class AuthorServiceTest {
     
     @Mock
     private AuthorRepository authorRepository;
