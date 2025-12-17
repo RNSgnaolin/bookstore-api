@@ -3,6 +3,8 @@ package br.com.bookstore.exceptions.mapper;
 import java.time.Instant;
 import java.util.Map;
 
+import org.slf4j.MDC;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +21,7 @@ public class ErrorResponse {
         this.status = status;
         this.path = path;
         this.timestamp = Instant.now();
+        this.traceId = MDC.get("traceId");
         this.errors = errors;
     }
 
@@ -30,4 +33,6 @@ public class ErrorResponse {
     private final Instant timestamp;
     @Schema(example = "{ \"title\": \"Título já existente para o autor indicado\", \"pageCount\": \"O número de páginas deve ser maior que zero\" }")
     private final Map<String, String> errors;
+    @Schema(description = "Identificação do HTTP Request para logging", example = "7f3a2c1e-9b4d-4c6a-a0f2-8a6d5e3c9b21")
+    private final String traceId;
 }
