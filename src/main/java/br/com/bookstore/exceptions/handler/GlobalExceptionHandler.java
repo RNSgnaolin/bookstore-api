@@ -33,6 +33,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEntityFieldNotFound(EntityFieldNotFoundException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
+        String traceId = MDC.get("traceId");
+
+        logger.warn("Entidade não encontrada para traceId={}, mensagem={}", traceId, ex.getMessage());
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
@@ -41,6 +44,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
+        String traceId = MDC.get("traceId");
+
+        logger.warn("Entidade não encontrada para traceId={}, mensagem={}", traceId, ex.getMessage());
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
@@ -49,6 +55,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        String traceId = MDC.get("traceId");
+
+        logger.warn("Falha em validação para traceId={}, erros={}", traceId, ex.getBindingResult().toString());
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
@@ -57,6 +66,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
+        String traceId = MDC.get("traceId");
+
+        logger.warn("Erro de validação para traceId={}", traceId, ex.getMessage());
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
@@ -65,6 +77,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleJpaSystem(JpaSystemException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
+        String traceId = MDC.get("traceId");
+
+        logger.error("Erro de validação no banco de dados para traceId={}", traceId, ex);
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
@@ -73,6 +88,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        String traceId = MDC.get("traceId");
+
+        logger.warn("Erro de leitura no JSON de traceId={}, mensagem={}", traceId, ex.getMessage());
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
@@ -81,6 +99,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBind(BindException ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        String traceId = MDC.get("traceId");
+        
+        logger.warn("Erro de validação em parâmetros para traceId={}, erros={}", traceId, ex.getBindingResult().toString());
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
