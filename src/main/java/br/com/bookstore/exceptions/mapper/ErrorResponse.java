@@ -1,7 +1,6 @@
 package br.com.bookstore.exceptions.mapper;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,13 +20,6 @@ public class ErrorResponse {
         this.path = path;
         this.timestamp = Instant.now();
         this.errors = errors;
-    }
-
-    public ErrorResponse(int status, String path) {
-        this.status = status;
-        this.path = path;
-        this.timestamp = Instant.now();
-        this.errors = new HashMap<>();
     }
 
     @Schema(example = "409")
