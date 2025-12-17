@@ -2,6 +2,9 @@ package br.com.bookstore.exceptions.handler;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class GlobalExceptionHandler {
     
     private final ExceptionMapper mapper;
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(EntityFieldNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityFieldNotFound(EntityFieldNotFoundException ex, HttpServletRequest request) {
@@ -85,6 +89,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleExceptionFallback(Exception ex, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        String traceId = MDC.get("traceId");
+
+        logger.error("Erro inesperado para traceId={}", traceId, ex);
 
         return buildResponse(status, mapper.handleException(ex), request);
     }
