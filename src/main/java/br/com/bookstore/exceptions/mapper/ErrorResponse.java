@@ -7,6 +7,7 @@ import org.slf4j.MDC;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import br.com.bookstore.infra.TraceIdFilter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -21,7 +22,7 @@ public class ErrorResponse {
         this.status = status;
         this.path = path;
         this.timestamp = Instant.now();
-        this.traceId = MDC.get("traceId");
+        this.traceId = MDC.get(TraceIdFilter.TRACE_ID);
         this.errors = errors;
     }
 

@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class TraceIdFilter extends OncePerRequestFilter {
 
+    public static final String TRACE_ID = "traceId";
+
     @Override
     protected void doFilterInternal(
         @NonNull HttpServletRequest request,
@@ -26,7 +28,7 @@ public class TraceIdFilter extends OncePerRequestFilter {
         String traceId = UUID.randomUUID().toString();
 
         try {
-            MDC.put("traceId", traceId);
+            MDC.put(TRACE_ID, traceId);
             filterChain.doFilter(request, response);
         } finally {
             MDC.remove(traceId);
