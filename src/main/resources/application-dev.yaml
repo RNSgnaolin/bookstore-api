@@ -7,3 +7,9 @@ spring:
     jpa:
       hibernate:
         ddl-auto: validate
+
+logging:
+  level:
+    br.com.bookstore: DEBUG
+    org.springframework: INFO
+    com.zaxxer.hikari: INFO
