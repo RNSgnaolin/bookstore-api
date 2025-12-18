@@ -24,9 +24,10 @@ public class BookBuilder {
 
     public static BookBuilder aBook() {
         return new BookBuilder().withTitle("Title")
-            .withPrice(BigDecimal.valueOf(99))
+            .withPrice(99)
             .withPageCount(99)
-            .withAuthor(new Author(new AuthorCreateDTO("Name")));
+            .withAuthor(new Author(new AuthorCreateDTO("Name")))
+            .withAuthorId(1L);
     }
     
     public BookBuilder withTitle(String title) {
@@ -34,8 +35,8 @@ public class BookBuilder {
         return this;
     }
 
-    public BookBuilder withPrice(BigDecimal price) {
-        this.price = price;
+    public BookBuilder withPrice(double price) {
+        this.price = BigDecimal.valueOf(price);
         return this;
     }
 
@@ -64,11 +65,11 @@ public class BookBuilder {
     }
 
     public BookCreateDTO buildCreateDTO() {
-        return new BookCreateDTO(title, price, 1L, pageCount);
+        return new BookCreateDTO(title, price, this.authorId, pageCount);
     }
 
     public BookUpdateDTO buildUpdateDTO() {
-        return new BookUpdateDTO(title, price, 1L, Integer.valueOf(pageCount));
+        return new BookUpdateDTO(title, price, this.authorId, Integer.valueOf(pageCount));
     }
 
 }
