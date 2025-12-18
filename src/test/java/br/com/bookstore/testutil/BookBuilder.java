@@ -35,6 +35,11 @@ public class BookBuilder {
         return this;
     }
 
+    public BookBuilder withPrice(BigDecimal price) {
+        this.price = price;
+        return this;
+    }
+    
     public BookBuilder withPrice(double price) {
         this.price = BigDecimal.valueOf(price);
         return this;
