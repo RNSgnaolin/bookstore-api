@@ -48,10 +48,12 @@ class BookServiceTest {
 
         bookService.update(1L, update);
 
-        Assertions.assertEquals(expected.getTitle(), actual.getTitle());
-        Assertions.assertEquals(expected.getPrice(), actual.getPrice());
-        Assertions.assertEquals(expected.getPageCount(), actual.getPageCount());
-        Assertions.assertEquals(expected.getStock(), actual.getStock());
+        Assertions.assertAll("updated book",
+            () -> Assertions.assertEquals(expected.getTitle(), actual.getTitle()),
+            () -> Assertions.assertEquals(expected.getPrice(), actual.getPrice()),
+            () -> Assertions.assertEquals(expected.getPageCount(), actual.getPageCount()),
+            () -> Assertions.assertEquals(expected.getStock(), actual.getStock())
+        );
     }
 
     @Test
@@ -66,10 +68,12 @@ class BookServiceTest {
 
         bookService.update(1L, update);
 
-        Assertions.assertEquals(expected.getTitle(), actual.getTitle());
-        Assertions.assertEquals(expected.getPrice(), actual.getPrice());
-        Assertions.assertEquals(expected.getPageCount(), actual.getPageCount());
-        Assertions.assertEquals(expected.getStock(), actual.getStock());
+        Assertions.assertAll("updated book",
+            () -> Assertions.assertEquals(expected.getTitle(), actual.getTitle()),
+            () -> Assertions.assertEquals(expected.getPrice(), actual.getPrice()),
+            () -> Assertions.assertEquals(expected.getPageCount(), actual.getPageCount()),
+            () -> Assertions.assertEquals(expected.getStock(), actual.getStock())
+        );
     }
 
     @Test
