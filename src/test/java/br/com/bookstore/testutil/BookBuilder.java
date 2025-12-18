@@ -3,6 +3,8 @@ package br.com.bookstore.testutil;
 import java.math.BigDecimal;
 
 import br.com.bookstore.dto.AuthorCreateDTO;
+import br.com.bookstore.dto.BookCreateDTO;
+import br.com.bookstore.dto.BookUpdateDTO;
 import br.com.bookstore.entity.Author;
 import br.com.bookstore.entity.Book;
 
@@ -18,6 +20,7 @@ public class BookBuilder {
     private BigDecimal price;
     private int pageCount;
     private Author author;
+    private Long authorId;
 
     public static BookBuilder aBook() {
         return new BookBuilder().withTitle("Title")
@@ -46,6 +49,11 @@ public class BookBuilder {
         return this;
     }
 
+    public BookBuilder withAuthorId(Long id) {
+        this.authorId = id;
+        return this;
+    }
+
     public BookBuilder withAuthor(AuthorCreateDTO data) {
         this.author = new Author(data);
         return this;
@@ -53,6 +61,14 @@ public class BookBuilder {
 
     public Book build() {
         return new Book(title, author, price, pageCount);
+    }
+
+    public BookCreateDTO buildCreateDTO() {
+        return new BookCreateDTO(title, price, 1L, pageCount);
+    }
+
+    public BookUpdateDTO buildUpdateDTO() {
+        return new BookUpdateDTO(title, price, 1L, Integer.valueOf(pageCount));
     }
 
 }
