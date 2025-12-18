@@ -1,8 +1,9 @@
 package br.com.bookstore.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.bookstore.dto.AuthorCreateDTO;
+import br.com.bookstore.dto.BookCreateDTO;
 import br.com.bookstore.dto.BookUpdateDTO;
+import br.com.bookstore.entity.Author;
 import br.com.bookstore.entity.Book;
 import br.com.bookstore.exceptions.domain.AuthorNotFoundException;
 import br.com.bookstore.exceptions.domain.BookNotFoundException;
@@ -39,10 +43,15 @@ class BookServiceTest {
 
         Book expected = BookBuilder.aBook()
             .withTitle("New Title")
-            .withPrice(BigDecimal.valueOf(32))
+            .withPrice(32)
             .withPageCount(12).build();
 
-        BookUpdateDTO update = new BookUpdateDTO("New Title", BigDecimal.valueOf(32), null, 12);
+        BookUpdateDTO update = BookBuilder.aBook()
+                                .withTitle("New Title")
+                                .withPrice(32)
+                                .withAuthorId(null)
+                                .withPageCount(12)
+                                .buildUpdateDTO();
 
         when(bookRepository.findById(1L)).thenReturn(Optional.of(actual));
 
@@ -81,7 +90,11 @@ class BookServiceTest {
 
         Book actual = BookBuilder.aBook().build();
 
-        BookUpdateDTO update = new BookUpdateDTO("New Title", null, 1L, 32);
+        BookUpdateDTO update = BookBuilder.aBook()
+                                .withTitle("New Title")
+                                .withPrice(null)
+                                .withPageCount(32)
+                                .buildUpdateDTO();
 
         when(bookRepository.findById(1L)).thenReturn(Optional.of(actual));
         when(authorRepository.findById(1L)).thenReturn(Optional.empty());
@@ -92,10 +105,25 @@ class BookServiceTest {
     @Test
     void updateBook_whenBookDoesNotExist_throwsBookNotFoundException() {
 
-        BookUpdateDTO update = new BookUpdateDTO("New Title", null, null, null);
+        BookUpdateDTO update = BookBuilder.aBook().buildUpdateDTO();
 
         when(bookRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(BookNotFoundException.class, () -> bookService.update(1L, update));
+    }
+
+    @Test
+    void createBook_whenBookTitleHasEmptySpaces_trimSpacesFromTitle() {
+
+        BookCreateDTO data = BookBuilder.aBook().withTitle("  Title    ").buildCreateDTO();
+        Author author = new Author(new AuthorCreateDTO("Name"));
+
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+        when(bookRepository.save(any(Book.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Book result = bookService.create(data);
+
+        Assertions.assertEquals("Title", result.getTitle());
+        verify(bookRepository).save(any(Book.class));
     }
 }
